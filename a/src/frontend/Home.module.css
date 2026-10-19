@@ -1,0 +1,35 @@
+.body {
+    display: flex;
+    flex-direction: column;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: purple;
+    align-items: center;
+
+    -ms-overflow-style: none;  /* IE and Edge */
+
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.webCamContainer {
+    width: 50vw;
+    height: 60%;
+
+    background-color: white;
+}
+
+.webCam {
+    width: 100%;
+    height: 100%;
+}
+
+.registerBtn {
+    width: 200px;
+    height: 100px;
+    margin-top: 50px;
+}
