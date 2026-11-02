@@ -1,19 +1,72 @@
-import React from 'react';
-import styles from './Home.module.css';
-import Webcam from "react-webcam"
-import { useRef } from 'react';
+import React, { Fragment, useCallback, useState } from "react";
+import styles from "./Home.module.css";
+import Webcam from "react-webcam";
+import { useRef } from "react";
+import api from "./api";
 
 export default function Home() {
-  const webCamRef = useRef(null)
-  
+  const webcamRef = useRef<Webcam>(null);
+
+  const handleRegister = () => {
+    const imgURL = webcamRef.current?.getScreenshot();
+
+    if (!imgURL) {
+      console.log("Could not take screenshot from webcam...");
+      return;
+    }
+
+    console.log(imgURL.slice(23));
+
+    const nameInput = window.prompt("Enter your name");
+
+    if (nameInput) {
+      const payload = {
+        name: nameInput,
+        base64: imgURL.split(",")[1], // Clear "data:image/jpeg;base64," to leave only the base64 string
+      };
+
+      api
+        .post("", payload)
+        .then(() => {
+          console.log("face img passed to the backend successfully!");
+        })
+        .catch((error) => {
+          console.log("Error sending img to backend... ", error);
+        });
+    }
+    console.log(nameInput);
+  };
+
+  const handleFaceId = () => {
+    const imgURL = webcamRef.current?.getScreenshot();
+
+    if (!imgURL) {
+      console.log("Could not take screenshot from webcam...");
+      return;
+    }
+    // api.get("/FaceID", payload).then((response.data) => {}).catch()
+
+  }
   return (
     <main className={styles.body}>
       <h1>Welcome to the Facial Recognition Project</h1>
-      <p>This is the home page of the application.</p>
+      <p>Home page</p>
       <div className={styles.webCamContainer}>
-        <Webcam className={styles.webCam}></Webcam>
+        <Webcam
+          className={styles.webCam}
+          ref={webcamRef}
+          audio={false}
+          screenshotFormat={"image/jpeg"}
+        ></Webcam>
       </div>
-      <button className={styles.registerBtn}>Registrar rostro</button>
+      <div className={styles.BtnContainer}>
+      <button className={styles.registerBtn} onClick={handleRegister}>
+        Registrar rostro
+      </button>
+      <button className={styles.registerBtn} onClick={handleFaceId}>
+        Reconocer rostro
+      </button>
+      </div>
     </main>
-  )
+  );
 }
