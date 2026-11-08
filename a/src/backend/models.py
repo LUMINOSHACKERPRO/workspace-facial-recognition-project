@@ -1,9 +1,17 @@
 from database import Base
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import mapped_column, Mapped
 
-class Face(Base):
-    __tablename__ = "Faces"
+class Person(Base):
+    __tablename__ = "People"
 
-    person_name = Column(String, primary_key=True, index=True)
-    embedding = Column(Vector(512), nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+
+class Embedding(Base):
+    __tablename__ = "Face_Embeddings"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    embedding = mapped_column(Vector(512))
+    person_id: Mapped[int] = mapped_column(ForeignKey("People.id"))
