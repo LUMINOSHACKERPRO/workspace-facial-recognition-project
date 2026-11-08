@@ -22,7 +22,7 @@ export default function Home() {
     if (nameInput) {
       const payload = {
         name: nameInput,
-        base64: imgURL.split(",")[1], // Clear "data:image/jpeg;base64," to leave only the base64 string
+        base64_face_img: imgURL.split(",")[1], // Clear "data:image/jpeg;base64," to leave only the base64 string
       };
 
       api
@@ -44,7 +44,12 @@ export default function Home() {
       console.log("Could not take screenshot from webcam...");
       return;
     }
-    // api.get("/FaceID", payload).then((response.data) => {}).catch()
+
+    const payload = {
+        base64_face_img: imgURL.split(",")[1], // Clear "data:image/jpeg;base64," to leave only the base64 string
+      };
+    
+    // api.post("/FaceID", payload).then((response.data) => {}).catch()
 
   }
   return (
