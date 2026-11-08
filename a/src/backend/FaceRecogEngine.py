@@ -19,12 +19,12 @@ class FaceRecognitionEngine():
         self.model = InceptionResnetV1(pretrained="vggface2").eval().to(self.device)
     
     @staticmethod
-    def decode_base64_image(base64_img: str):
+    def __decode_base64_image(base64_img: str):
         raw_bytes = base64.b64decode(base64_img)
         return Image.open(io.BytesIO(raw_bytes)).convert("RGB")
 
     def embed(self, base64_img):
-        image = self.decode_base64_image(base64_img)
+        image = self.__decode_base64_image(base64_img)
         
         face = self.mtcnn(image)
         if face is None:
@@ -34,4 +34,4 @@ class FaceRecognitionEngine():
 
         embedding  = Func.normalize(embedding, p=2, dim=1)
 
-        return embedding.squeeze(0).cpu().tolist()
+        return embedding.squeeze(0).cpu().numpy()
